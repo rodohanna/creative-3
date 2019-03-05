@@ -1,5 +1,5 @@
 <template>
-  <section class="hero is-medium is-info is-bold game-section hide">
+  <section class="hero is-medium is-dark is-bold game-section">
     <div class="hero-body">
       <div class="container response-container">
         <hr>
@@ -20,7 +20,7 @@
         <hr>
         <div class="level-data">
           <span class="stats">
-            <i class="fas fa-star"></i>
+            <i class="fas fa-star positive-points"></i>
             <span id="points">{{correctQuestions}}</span>
           </span>
           <span class="timer">
@@ -59,7 +59,7 @@ export default {
   },
   data() {
     return {
-      time: 10,
+      time: 15,
       block: false,
       interval: null
     };
@@ -114,7 +114,7 @@ export default {
   watch: {
     question: function() {
       this.block = false;
-      this.time = 10;
+      this.time = 15;
       Array.from(document.querySelectorAll(".question-button")).forEach(
         button => {
           button.classList.remove("is-primary");
@@ -128,6 +128,11 @@ export default {
 </script>
 
 <style scoped>
+.positive-points {
+  color: #ffdc00;
+  margin: 4px;
+}
+
 .button {
   margin-top: 20px;
   height: 75px;
@@ -165,7 +170,7 @@ export default {
 
 .response-container .button {
   margin-top: 20px;
-  height: 75px;
+  height: 50px;
   white-space: unset;
   text-align: center;
 }

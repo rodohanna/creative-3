@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar is-dark is-fixed-bottom">
+  <nav class="navbar is-info is-fixed-bottom">
     <div class="navbar-brand">
       <h3 class="title github-link">
         <a
@@ -11,3 +11,11 @@
     </div>
   </nav>
 </template>
+
+<style scoped>
+a {
+  color: white;
+  margin: 11px;
+  font-size: 15px;
+}
+</style>

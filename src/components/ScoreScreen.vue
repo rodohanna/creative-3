@@ -1,5 +1,5 @@
 <template>
-  <section class="hero is-fullheight is-info is-bold results-section hide">
+  <section class="hero is-fullheight is-dark is-bold results-section hide">
     <div class="hero-body">
       <div class="container result-container">
         <h1 class="title banner-title results-title">
@@ -7,8 +7,8 @@
           <span class="points-color">{{correctQuestions}}</span>
           {{questionsText}} Correct
         </h1>
-        <h2 class="subtitle results-subtitle">Great Job!</h2>
-        <a class="button is-primary try-again-btn" v-on:click="handleTryAgain">Try Again</a>
+        <h2 class="subtitle results-subtitle">{{feedbackText}}</h2>
+        <a class="button is-info try-again-btn" v-on:click="handleTryAgain">Try Again</a>
       </div>
     </div>
   </section>
@@ -19,7 +19,22 @@ export default {
   props: ["correctQuestions", "resetGame"],
   computed: {
     questionsText: function() {
-      return this.correctQuestions === 1 ? "Question" : "Questions";
+      return this.correctQuestions === 1 ? "Scripture" : "Scriptures";
+    },
+    feedbackText: function() {
+      if (this.correctQuestions === 0) {
+        return "No worries, try again!";
+      }
+      if (this.correctQuestions < 3) {
+        return "Not too bad!";
+      }
+      if (this.correctQuestions < 6) {
+        return "Wow, you're pretty good!";
+      }
+      if (this.correctQuestions === 10) {
+        return "Unbelievable. Bravo.";
+      }
+      return "Fantastic!";
     }
   },
   methods: {

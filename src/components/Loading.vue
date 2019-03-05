@@ -1,5 +1,5 @@
 <template>
-  <section class="hero is-medium is-info is-bold game-section hide">
+  <section class="hero is-medium is-dark is-bold game-section hide">
     <div class="hero-body">
       <div class="container">
         <div id="question-mount"></div>

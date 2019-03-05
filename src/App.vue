@@ -15,9 +15,7 @@
       v-bind:buttons="books"
       v-bind:correctAnswer="correctBook"
       v-bind:difficulty="difficultyLevel"
-      streak="10"
       v-bind:question="questionText"
-      points="2"
       v-bind:highScore="highScore"
       v-bind:correctQuestions="correctQuestions"
       v-bind:handleStateChange="handleStateChange"
@@ -53,7 +51,7 @@ export default {
     return {
       bomLoaded: false,
       currQuestion: 0,
-      numQuestions: 2,
+      numQuestions: 10,
       highScore: 0,
       correctQuestions: 0,
       state: "begin",
@@ -148,7 +146,7 @@ export default {
         this.highScore = this.correctQuestions;
       }
       this.currQuestion = 0;
-      this.numQuestions = 2;
+      this.numQuestions = 5;
       this.correctQuestions = 0;
       this.state = "begin";
       this.gameIsRunning = false;
@@ -175,5 +173,9 @@ section,
 .hero-body,
 #app {
   height: 100%;
+  overflow-y: auto;
+}
+.container {
+  padding-bottom: 60px;
 }
 </style>
