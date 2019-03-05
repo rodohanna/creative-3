@@ -146,7 +146,7 @@ export default {
         this.highScore = this.correctQuestions;
       }
       this.currQuestion = 0;
-      this.numQuestions = 5;
+      this.numQuestions = 10;
       this.correctQuestions = 0;
       this.state = "begin";
       this.gameIsRunning = false;
