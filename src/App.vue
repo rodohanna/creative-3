@@ -153,7 +153,6 @@ export default {
       this.questionText = "";
       this.books = [];
       this.correctBook = "";
-      this.difficultyLevel = "easy";
     }
   }
 };

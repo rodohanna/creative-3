@@ -83,7 +83,7 @@ export default {
           );
           setTimeout(() => {
             appContext.handleStateChange("question");
-          }, 1000);
+          }, 1500);
         }
       }, 1000);
     },
@@ -99,11 +99,19 @@ export default {
         e.target.classList.add("is-primary");
       } else {
         e.target.classList.add("is-danger");
+        Array.from(document.querySelectorAll(".question-button")).forEach(
+          button => {
+            if (button.textContent === this.correctAnswer) {
+              button.classList.add("is-primary");
+              button.classList.remove("is-danger");
+            }
+          }
+        );
       }
       const appContext = this;
       setTimeout(() => {
         appContext.handleStateChange("question");
-      }, 1000);
+      }, 1500);
     }
   },
   computed: {

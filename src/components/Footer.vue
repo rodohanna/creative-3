@@ -18,4 +18,7 @@ a {
   margin: 11px;
   font-size: 15px;
 }
+.navbar {
+  opacity: 0.5;
+}
 </style>
