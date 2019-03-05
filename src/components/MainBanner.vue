@@ -2,10 +2,10 @@
   <section class="hero is-fullheight is-dark is-bold main-banner">
     <div class="hero-body">
       <div class="container banner-container">
-        <h1 class="title banner-title">10 Scriptures | 15 Seconds per Scripture</h1>
+        <h1 class="title banner-title">10 Scriptures | 30 Seconds per Scripture</h1>
         <h2
           class="subtitle"
-        >You get a random scripture from the Book of Mormon and you have 15 seconds to guess which book it belongs in.</h2>
+        >You get a random scripture from the Book of Mormon and you have 30 seconds to guess which book it belongs in.</h2>
         <div class="columns is-mobile">
           <div class="column is-6">
             <a class="button is-info start-game-btn" v-on:click="handleBegin">BEGIN</a>

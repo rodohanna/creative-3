@@ -59,7 +59,7 @@ export default {
   },
   data() {
     return {
-      time: 15,
+      time: 30,
       block: false,
       interval: null
     };
@@ -122,7 +122,7 @@ export default {
   watch: {
     question: function() {
       this.block = false;
-      this.time = 15;
+      this.time = 30;
       Array.from(document.querySelectorAll(".question-button")).forEach(
         button => {
           button.classList.remove("is-primary");
