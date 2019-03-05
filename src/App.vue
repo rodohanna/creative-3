@@ -5,18 +5,25 @@
       v-bind:handleStateChange="handleStateChange"
       v-bind:handleDifficultyChange="handleDifficultyChange"
     />
-    <ScoreScreen v-if="state == 'score'"/>
+    <ScoreScreen
+      v-if="state == 'score'"
+      v-bind:correctQuestions="correctQuestions"
+      v-bind:resetGame="resetGame"
+    />
     <Question
-      v-if="state == 'question'"
+      v-if="state == 'question' && bomLoaded === true"
       v-bind:buttons="books"
       v-bind:correctAnswer="correctBook"
       v-bind:difficulty="difficultyLevel"
       streak="10"
       v-bind:question="questionText"
       points="2"
+      v-bind:highScore="highScore"
+      v-bind:correctQuestions="correctQuestions"
       v-bind:handleStateChange="handleStateChange"
+      v-bind:incrementCorrectQuestions="incrementCorrectQuestions"
     />
-    <Loading v-if="state == 'loading'"/>
+    <Loading v-if="state == 'question' && bomLoaded === false"/>
     <Footer/>
   </div>
 </template>
@@ -27,6 +34,7 @@ import ScoreScreen from "./components/ScoreScreen.vue";
 import Question from "./components/Question.vue";
 import Loading from "./components/Loading.vue";
 import Footer from "./components/Footer.vue";
+import { setTimeout } from "timers";
 
 export default {
   name: "app",
@@ -39,9 +47,15 @@ export default {
   },
   async created() {
     this.bom = await fetch("/bom.json").then(r => r.json());
+    this.bomLoaded = true;
   },
   data() {
     return {
+      bomLoaded: false,
+      currQuestion: 0,
+      numQuestions: 2,
+      highScore: 0,
+      correctQuestions: 0,
       state: "begin",
       bom: null,
       gameIsRunning: false,
@@ -52,11 +66,17 @@ export default {
     };
   },
   methods: {
-    handleStateChange: function(newState) {
+    incrementCorrectQuestions: function() {
+      this.correctQuestions += 1;
+    },
+    handleStateChange: async function(newState) {
       console.log({ newState });
       this.state = newState;
       if (this.state === "question") {
         console.log("start game");
+        while (this.bomLoaded === false) {
+          await new Promise(r => setTimeout(r, 100));
+        }
         this.gameLoop();
       }
     },
@@ -64,6 +84,11 @@ export default {
       this.difficultyLevel = difficulty;
     },
     gameLoop: function() {
+      this.currQuestion += 1;
+      if (this.currQuestion >= this.numQuestions + 1) {
+        this.handleStateChange("score");
+        return;
+      }
       /**
        * Randomly shuffle an array
        * https://stackoverflow.com/a/2450976/1293256
@@ -117,6 +142,20 @@ export default {
         ...distractions.map(book => book.book)
       ]);
       this.questionText = randVerse.text;
+    },
+    resetGame: function() {
+      if (this.highScore < this.correctQuestions) {
+        this.highScore = this.correctQuestions;
+      }
+      this.currQuestion = 0;
+      this.numQuestions = 2;
+      this.correctQuestions = 0;
+      this.state = "begin";
+      this.gameIsRunning = false;
+      this.questionText = "";
+      this.books = [];
+      this.correctBook = "";
+      this.difficultyLevel = "easy";
     }
   }
 };
@@ -129,5 +168,12 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+html,
+body,
+section,
+.hero-body,
+#app {
+  height: 100%;
 }
 </style>

@@ -7,7 +7,7 @@
           <div class="level-item has-text-centered">
             <div>
               <p class="heading">High Score</p>
-              <p class="title">{{streak}}</p>
+              <p class="title">{{highScore}}</p>
             </div>
           </div>
           <div class="level-item has-text-centered">
@@ -21,7 +21,7 @@
         <div class="level-data">
           <span class="stats">
             <i class="fas fa-star"></i>
-            <span id="points">{{points}}</span>
+            <span id="points">{{correctQuestions}}</span>
           </span>
           <span class="timer">
             <i class="far fa-clock"></i>
@@ -49,7 +49,10 @@ export default {
     "question",
     "points",
     "correctAnswer",
-    "handleStateChange"
+    "handleStateChange",
+    "incrementCorrectQuestions",
+    "highScore",
+    "correctQuestions"
   ],
   created() {
     this.startTimer();
@@ -92,6 +95,7 @@ export default {
       this.block = true;
       const isCorrectAnswer = e.target.textContent === this.correctAnswer;
       if (isCorrectAnswer) {
+        this.incrementCorrectQuestions();
         e.target.classList.add("is-primary");
       } else {
         e.target.classList.add("is-danger");
@@ -99,7 +103,7 @@ export default {
       const appContext = this;
       setTimeout(() => {
         appContext.handleStateChange("question");
-      }, 2000);
+      }, 1000);
     }
   },
   computed: {
