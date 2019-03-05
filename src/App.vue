@@ -1,14 +1,20 @@
 <template>
   <div id="app">
-    <MainBanner v-if="state == 'begin'" v-bind:handleStateChange="handleStateChange"/>
+    <MainBanner
+      v-if="state == 'begin'"
+      v-bind:handleStateChange="handleStateChange"
+      v-bind:handleDifficultyChange="handleDifficultyChange"
+    />
     <ScoreScreen v-if="state == 'score'"/>
     <Question
       v-if="state == 'question'"
-      v-bind:buttons="['one', 'two', 'three']"
-      difficulty="Easy"
+      v-bind:buttons="books"
+      v-bind:correctAnswer="correctBook"
+      v-bind:difficulty="difficultyLevel"
       streak="10"
-      question="This is a question"
+      v-bind:question="questionText"
       points="2"
+      v-bind:handleStateChange="handleStateChange"
     />
     <Loading v-if="state == 'loading'"/>
     <Footer/>
@@ -31,32 +37,86 @@ export default {
     Loading,
     Footer
   },
+  async created() {
+    this.bom = await fetch("/bom.json").then(r => r.json());
+  },
   data() {
     return {
-      state: "begin"
+      state: "begin",
+      bom: null,
+      gameIsRunning: false,
+      questionText: "",
+      books: [],
+      correctBook: "",
+      difficultyLevel: "easy"
     };
   },
   methods: {
-    stateHandler: function() {
-      return {
-        begin: function() {
-          this.state = "begin";
-        },
-        score: function() {
-          this.state = "score";
-        },
-        loading: function() {
-          console.log(this.state);
-          this.state = "loading";
-        },
-        question: function() {
-          this.state = "question";
-        }
-      };
-    },
     handleStateChange: function(newState) {
       console.log({ newState });
       this.state = newState;
+      if (this.state === "question") {
+        console.log("start game");
+        this.gameLoop();
+      }
+    },
+    handleDifficultyChange: function(difficulty) {
+      this.difficultyLevel = difficulty;
+    },
+    gameLoop: function() {
+      /**
+       * Randomly shuffle an array
+       * https://stackoverflow.com/a/2450976/1293256
+       * @param  {Array} array The array to shuffle
+       * @return {String}      The first item in the shuffled array
+       */
+      var shuffle = function(array) {
+        var currentIndex = array.length;
+        var temporaryValue, randomIndex;
+
+        // While there remain elements to shuffle...
+        while (0 !== currentIndex) {
+          // Pick a remaining element...
+          randomIndex = Math.floor(Math.random() * currentIndex);
+          currentIndex -= 1;
+
+          // And swap it with the current element.
+          temporaryValue = array[currentIndex];
+          array[currentIndex] = array[randomIndex];
+          array[randomIndex] = temporaryValue;
+        }
+
+        return array;
+      };
+      const randRange = (min, max) => {
+        return parseInt(Math.random() * (max - min) + min);
+      };
+      const books = this.bom.books;
+      const bookNames = books.map(book => book.book.toLowerCase()).join("\n");
+      const randBook = books[randRange(0, books.length - 1)];
+      const chapters = randBook.chapters;
+      const randChapter = chapters[randRange(0, chapters.length - 1)];
+      const verses = randChapter.verses;
+      const randVerse = verses[randRange(0, verses.length - 1)];
+
+      this.correctBook = randBook.book;
+
+      let spliceNum = 14;
+      if (this.difficultyLevel === "easy") {
+        spliceNum = 2;
+      } else if (this.difficultyLevel === "medium") {
+        spliceNum = 4;
+      } else if (this.difficultyLevel === "hard") {
+        spliceNum = 6;
+      }
+      const distractions = shuffle([
+        ...books.filter(book => book.book !== this.correctBook)
+      ]).splice(0, spliceNum);
+      this.books = shuffle([
+        this.correctBook,
+        ...distractions.map(book => book.book)
+      ]);
+      this.questionText = randVerse.text;
     }
   }
 };
