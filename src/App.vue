@@ -21,8 +21,7 @@
       v-bind:handleStateChange="handleStateChange"
       v-bind:incrementCorrectQuestions="incrementCorrectQuestions"
     />
-    <Loading v-if="state == 'question' && bomLoaded === false"/>
-    <Footer/>
+    <Loading v-if="state == 'question' && bomLoaded === false" />
   </div>
 </template>
 
@@ -41,10 +40,10 @@ export default {
     ScoreScreen,
     Question,
     Loading,
-    Footer
+    Footer,
   },
   async created() {
-    this.bom = await fetch("/bom.json").then(r => r.json());
+    this.bom = await fetch("/bom.json").then((r) => r.json());
     this.bomLoaded = true;
   },
   data() {
@@ -60,7 +59,7 @@ export default {
       questionText: "",
       books: [],
       correctBook: "",
-      difficultyLevel: "easy"
+      difficultyLevel: "easy",
     };
   },
   methods: {
@@ -73,7 +72,7 @@ export default {
       if (this.state === "question") {
         console.log("start game");
         while (this.bomLoaded === false) {
-          await new Promise(r => setTimeout(r, 100));
+          await new Promise((r) => setTimeout(r, 100));
         }
         this.gameLoop();
       }
@@ -115,7 +114,7 @@ export default {
         return parseInt(Math.random() * (max - min) + min);
       };
       const books = this.bom.books;
-      const bookNames = books.map(book => book.book.toLowerCase()).join("\n");
+      const bookNames = books.map((book) => book.book.toLowerCase()).join("\n");
       const randBook = books[randRange(0, books.length - 1)];
       const chapters = randBook.chapters;
       const randChapter = chapters[randRange(0, chapters.length - 1)];
@@ -133,11 +132,11 @@ export default {
         spliceNum = 6;
       }
       const distractions = shuffle([
-        ...books.filter(book => book.book !== this.correctBook)
+        ...books.filter((book) => book.book !== this.correctBook),
       ]).splice(0, spliceNum);
       this.books = shuffle([
         this.correctBook,
-        ...distractions.map(book => book.book)
+        ...distractions.map((book) => book.book),
       ]);
       this.questionText = randVerse.text;
     },
@@ -153,8 +152,8 @@ export default {
       this.questionText = "";
       this.books = [];
       this.correctBook = "";
-    }
-  }
+    },
+  },
 };
 </script>
 
