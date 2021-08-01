@@ -2,39 +2,40 @@
   <section class="hero is-medium is-dark is-bold game-section">
     <div class="hero-body">
       <div class="container response-container">
-        <hr>
+        <hr />
         <nav class="level is-mobile">
           <div class="level-item has-text-centered">
             <div>
               <p class="heading">High Score</p>
-              <p class="title">{{highScore}}</p>
+              <p class="title">{{ highScore }}</p>
             </div>
           </div>
           <div class="level-item has-text-centered">
             <div>
               <p class="heading">Difficulty</p>
-              <p class="title">{{difficultyFormatted}}</p>
+              <p class="title">{{ difficultyFormatted }}</p>
             </div>
           </div>
         </nav>
-        <hr>
+        <hr />
         <div class="level-data">
           <span class="stats">
             <i class="fas fa-star positive-points"></i>
-            <span id="points">{{correctQuestions}}</span>
+            <span id="points">{{ correctQuestions }}</span>
           </span>
           <span class="timer">
             <i class="far fa-clock"></i>
-            <span id="timer-text">{{time}}</span>
+            <span id="timer-text">{{ time }}</span>
           </span>
         </div>
-        <h2 class="subtitle">"{{question}}"</h2>
+        <h2 class="subtitle">"{{ question }}"</h2>
         <a
           class="button is-medium is-light is-fullwidth is-rounded question-button"
           v-for="button in buttons"
           v-bind:key="button"
           v-on:click="handleButtonClick"
-        >{{button}}</a>
+          >{{ button }}</a
+        >
       </div>
     </div>
   </section>
@@ -52,7 +53,7 @@ export default {
     "handleStateChange",
     "incrementCorrectQuestions",
     "highScore",
-    "correctQuestions"
+    "correctQuestions",
   ],
   created() {
     this.startTimer();
@@ -61,7 +62,7 @@ export default {
     return {
       time: 30,
       block: false,
-      interval: null
+      interval: null,
     };
   },
   methods: {
@@ -74,7 +75,7 @@ export default {
           appContext.block = true;
           clearInterval(appContext.interval);
           Array.from(document.querySelectorAll(".question-button")).forEach(
-            button => {
+            (button) => {
               if (button.textContent === appContext.correctAnswer) {
                 button.classList.add("is-primary");
                 button.classList.remove("is-danger");
@@ -100,7 +101,7 @@ export default {
       } else {
         e.target.classList.add("is-danger");
         Array.from(document.querySelectorAll(".question-button")).forEach(
-          button => {
+          (button) => {
             if (button.textContent === this.correctAnswer) {
               button.classList.add("is-primary");
               button.classList.remove("is-danger");
@@ -112,26 +113,26 @@ export default {
       setTimeout(() => {
         appContext.handleStateChange("question");
       }, 1500);
-    }
+    },
   },
   computed: {
     difficultyFormatted: function() {
       return this.difficulty.charAt(0).toUpperCase() + this.difficulty.slice(1);
-    }
+    },
   },
   watch: {
     question: function() {
       this.block = false;
       this.time = 30;
       Array.from(document.querySelectorAll(".question-button")).forEach(
-        button => {
+        (button) => {
           button.classList.remove("is-primary");
           button.classList.remove("is-danger");
         }
       );
       this.startTimer();
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -194,4 +195,3 @@ export default {
   }
 }
 </style>
-
